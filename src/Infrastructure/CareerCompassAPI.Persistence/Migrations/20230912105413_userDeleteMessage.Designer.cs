@@ -4,6 +4,7 @@ using CareerCompassAPI.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CareerCompassAPI.Persistence.Migrations
 {
     [DbContext(typeof(CareerCompassDbContext))]
-    partial class CareerCompassDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230912105413_userDeleteMessage")]
+    partial class userDeleteMessage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,9 +190,6 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -208,12 +207,9 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
 
                     b.HasIndex("CompanyId");
 
@@ -978,10 +974,6 @@ namespace CareerCompassAPI.Persistence.Migrations
 
             modelBuilder.Entity("CareerCompassAPI.Domain.Entities.Follower", b =>
                 {
-                    b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", null)
-                        .WithMany("Followers")
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("CareerCompassAPI.Domain.Entities.Company", "Company")
                         .WithMany("Followers")
                         .HasForeignKey("CompanyId")
@@ -989,10 +981,8 @@ namespace CareerCompassAPI.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("CareerCompassAPI.Domain.Identity.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Followers")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Company");
 
